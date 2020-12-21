@@ -4,11 +4,15 @@ from rest_framework import permissions, viewsets
 from .serializers import NotesSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from django.utils import timezone
 
 class NotesView(viewsets.ModelViewSet):
     serializer_class = NotesSerializer
     permission_classes = (permissions.AllowAny,)
     queryset = Notes.objects.all()
+
+    def perform_update(self, serializer):
+        serializer.save(modifiedOn = timezone.now())
 
     @action(methods=['GET'], detail=False)
     def bookmarks(self, request, *args, **kwargs):
