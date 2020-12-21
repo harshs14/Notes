@@ -1,12 +1,22 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 class Notes(models.Model):
-    title = models.CharField(max_length=30, unique=True, null=False)
-    content = models.TextField(max_length=1000)
-    createdOn = models.DateTimeField(default=timezone.now)
-    modifiedOn = models.DateTimeField(default=timezone.now)
-    bookmark = models.BooleanField(default=False)
+    owner = models.ForeignKey(User, on_delete = models.CASCADE)
+    title = models.CharField(max_length = 30, unique = True, null = False)
+    content = models.TextField(max_length = 1000)
+    createdOn = models.DateTimeField(default = timezone.now)
+    modifiedOn = models.DateTimeField(default = timezone.now)
+    bookmark = models.BooleanField(default = False)
 
     def __str__(self):
-        return self.title
+        return str(self.title)
+
+class Otp(models.Model):
+    userId = models.ForeignKey(User, on_delete = models.CASCADE)
+    otp = models.IntegerField(null = False, blank = False)
+    timestamp = models.DateTimeField(default = timezone.now)
+
+    def __str__(self):
+        return "otp for %s is %s" % (self.userId, self.otp)
