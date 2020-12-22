@@ -3,6 +3,7 @@ from . import views
 from django.urls import include
 from rest_framework.routers import DefaultRouter
 from server.settings import STATIC_ROOT, STATIC_URL
+from django.conf.urls.static import static
 
 router = DefaultRouter()
 router.register(r'notes', views.NotesView)
