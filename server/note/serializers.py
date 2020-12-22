@@ -18,7 +18,7 @@ class OtpSerialaizer(serializers.ModelSerializer):
     class Meta:
         model = Otp
         fields = ('userId', 'otp',)
-        read_only_fields = ('userId')
+        read_only_fields = ('userId',)
 
 class UserSignupSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(
@@ -73,16 +73,16 @@ class UserSignupSerializer(serializers.ModelSerializer):
 
 
 
-# class UserLoginSerializer(serializers.ModelSerializer):
+class UserLoginSerializer(serializers.ModelSerializer):
     
-#     password = serializers.CharField(
-#         required=True, 
-#         style={'input_type': 'password'},
-#     )
+    password = serializers.CharField(
+        required=True, 
+        style={'input_type': 'password'},
+    )
 
-#     class Meta:
-#         model = User
-#         fields = ('username', 'password',)
+    class Meta:
+        model = User
+        fields = ('username', 'password',)
 
 # class UserProfileSerializer(serializers.ModelSerializer):
 

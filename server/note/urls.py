@@ -9,4 +9,7 @@ router.register(r'notes', views.NotesView)
 urlpatterns = [
     re_path(r'', include(router.urls)),
     re_path(r'^signup/$', views.UserSignupView.as_view(), name='signup'),
+    re_path(r'^verify/(?P<userId>[0-9]+)/$', views.UserVerificationView.as_view(), name='verify'),
+    re_path(r'^resend/(?P<userId>[0-9]+)/$', views.ResendOtpView.as_view(), name='resend'),
+    re_path(r'^login/$', views.UserLoginView.as_view(), name='login'),
 ]
