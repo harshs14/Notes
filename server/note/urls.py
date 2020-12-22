@@ -8,4 +8,5 @@ router.register(r'notes', views.NotesView)
 
 urlpatterns = [
     re_path(r'', include(router.urls)),
+    re_path(r'^signup/$', views.UserSignupView.as_view(), name='signup'),
 ]
