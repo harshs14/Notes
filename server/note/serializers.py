@@ -11,7 +11,7 @@ class NotesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notes
         fields = '__all__'
-        read_only_fields = ('createdOn','modifiedOn',)
+        read_only_fields = ('createdOn', 'modifiedOn', 'user',)
 
 class OtpSerialaizer(serializers.ModelSerializer):
     

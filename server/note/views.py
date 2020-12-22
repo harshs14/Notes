@@ -10,13 +10,12 @@ from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.models import User
 from rest_framework.exceptions import ValidationError
-from .token import get_tokens_for_user
-# from .mail import sendMail
 from django.core.mail import send_mail
 from server.settings import EMAIL_HOST_USER
 from rest_framework_simplejwt.tokens import RefreshToken
 from datetime import datetime
 from django.contrib.auth import login, authenticate, logout
+from .permissions import IsOwner
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -28,14 +27,14 @@ def get_tokens_for_user(user):
 
 def sendMail(user):
     try:
-        otp = Otp.objects.filter(userId = user)
+        otp = Otp.objects.filter(user = user)
     except(TypeError, ValueError, OverflowError, OTP.DoesNotExist):
         otp = None
     if otp is not None:
         otp.delete()
 
     otp = random.randint(1000,10000)
-    otpObj = Otp.objects.create(userId = user, otp = otp)
+    otpObj = Otp.objects.create(user = user, otp = otp)
 
     subject = 'NOTES VERIFICATION'
     message = 'YOUR OTP : ' + str(otpObj.otp)
@@ -82,7 +81,7 @@ class UserVerificationView(APIView):
         serializer = OtpSerialaizer(data = request.data)
         code = request.data['otp']
         try:
-            otp = Otp.objects.get(userId = userId)
+            otp = Otp.objects.get(user = userId)
         except(TypeError, ValueError, OverflowError, Otp.DoesNotExist):
             otp = None
         
@@ -140,9 +139,17 @@ class UserLoginView(APIView):
 
 class NotesView(viewsets.ModelViewSet):
     serializer_class = NotesSerializer
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated, IsOwner,)
     queryset = Notes.objects.all()
 
+    def list(self, request):
+        queryset = Notes.objects.filter(user = request.user.id)
+        serializer = NotesSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def perform_create(self, serializer):
+            serializer.save(user = self.request.user)
+    
     def perform_update(self, serializer):
         serializer.save(modifiedOn = timezone.now())
 
