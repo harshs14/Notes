@@ -8,7 +8,7 @@ class Otp(models.Model):
     timestamp = models.DateTimeField(default = timezone.now)
 
     def __str__(self):
-        return "otp for %s is %s" % (self.userId, self.otp)
+        return "otp for %s is %s" % (self.user, self.otp)
 
 class Notes(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)

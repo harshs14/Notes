@@ -40,6 +40,7 @@ def sendMail(user):
     message = 'YOUR OTP : ' + str(otpObj.otp)
     to_mail = [user.email]
     from_mail = EMAIL_HOST_USER
+    print(from_mail)
     send_mail(subject, message, from_mail, to_mail, fail_silently=False)
 
 class UserSignupView(APIView):
@@ -91,10 +92,10 @@ class UserVerificationView(APIView):
             user = None
 
         if not otp or not user:
-            raise ValidationError({'error': 'Invalid user'})
+            return Response({'error': 'Invalid user'})
 
         elif timezone.now() - otp.timestamp >= timedelta(minutes=1):
-            raise ValidationError({'error': 'OTP expired'})
+            return Response({'error': 'OTP expired'})
 
         elif str(otp.otp) == str(code):
             user.is_active = True
@@ -103,6 +104,7 @@ class UserVerificationView(APIView):
             refresh, access = get_tokens_for_user(user)
             
             return Response({'info': 'User verified', 'refresh': refresh, 'access': access}) 
+        return Response({'error':'Invalid Otp'})
 
 class ResendOtpView(APIView):
     serializer_class = OtpSerialaizer
@@ -161,6 +163,6 @@ class NotesView(viewsets.ModelViewSet):
 
     @action(methods=['GET'], detail=False)
     def bookmarks(self, request, *args, **kwargs):
-        bookmarkedNotes = Notes.objects.filter(bookmark=True)
+        bookmarkedNotes = Notes.objects.filter(bookmark=True, user=self.request.user)
         serializer = NotesSerializer(bookmarkedNotes, many=True)
         return Response(serializer.data)

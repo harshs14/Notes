@@ -17,8 +17,8 @@ class OtpSerialaizer(serializers.ModelSerializer):
     
     class Meta:
         model = Otp
-        fields = ('userId', 'otp',)
-        read_only_fields = ('userId',)
+        fields = ('user', 'otp',)
+        read_only_fields = ('user',)
 
 class UserSignupSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(
