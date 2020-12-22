@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'i$2y82-kh^4t9ev21+dqb=a3om6z!)+uh2o50k0#+ybh3^kx)t'
+SECRET_KEY = os.environ.get("secretKey")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -126,8 +126,8 @@ STATIC_URL = '/static/'
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'onlineauction.si18@gmail.com'
-EMAIL_HOST_PASSWORD = '9990116446si18'
+EMAIL_HOST_USER = os.environ.get("senderEmail")
+EMAIL_HOST_PASSWORD = os.environ.get("senderEmailPassword")
 EMAIL_PORT = 587
 
 

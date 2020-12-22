@@ -137,6 +137,12 @@ class UserLoginView(APIView):
             return Response({'error': 'User not verified'})
         return Response({'error': 'Inavalid Credentials'})
 
+class UserLogoutView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return Response({'info': 'logged out'})
+
 class NotesView(viewsets.ModelViewSet):
     serializer_class = NotesSerializer
     permission_classes = (permissions.IsAuthenticated, IsOwner,)
