@@ -18,9 +18,9 @@ from django.contrib.auth import login, authenticate, logout
 from .permissions import IsOwner
 
 def get_tokens_for_user(user):
-    '''
+    """
     function to get access, refresh tokens
-    '''
+    """
     refresh = RefreshToken.for_user(user)
     refresh.payload['sub'] = user.id
     refresh.payload['iat'] = datetime.now()
@@ -29,9 +29,9 @@ def get_tokens_for_user(user):
     return str(refresh), str(refresh.access_token)
 
 def sendMail(user):
-    '''
+    """
     function to send otp mail
-    '''
+    """
     try:
         otp = Otp.objects.filter(user = user)
     except(TypeError, ValueError, OverflowError, OTP.DoesNotExist):
@@ -50,9 +50,9 @@ def sendMail(user):
     send_mail(subject, message, from_mail, to_mail, fail_silently=False)
 
 class UserSignupView(APIView):
-    '''
+    """
     View for sign up.
-    '''
+    """
     serializer_class = UserSignupSerializer
     permission_classes = (permissions.AllowAny,)
 
@@ -84,9 +84,9 @@ class UserSignupView(APIView):
         raise ValidationError({'error': 'Invalid User'})
 
 class UserVerificationView(APIView):
-    '''
+    """
     View for user verification using otp.
-    '''
+    """
     serializer_class = OtpSerialaizer
     permission_classes = (permissions.AllowAny,)
 
@@ -119,9 +119,9 @@ class UserVerificationView(APIView):
         return Response({'error':'Invalid Otp'})
 
 class ResendOtpView(APIView):
-    '''
+    """
     View to resend otp.
-    '''
+    """
     serializer_class = OtpSerialaizer
     permission_classes = (permissions.AllowAny,)
 
@@ -140,9 +140,9 @@ class ResendOtpView(APIView):
         return Response({'error': 'Invalid user'})
 
 class UserLoginView(APIView):
-    '''
+    """
     View for log in.
-    '''
+    """
     serializer_class = UserLoginSerializer
     permission_classes = (permissions.AllowAny,)
 
@@ -160,17 +160,17 @@ class UserLoginView(APIView):
         return Response({'error': 'Inavalid Credentials'})
 
 class UserLogoutView(APIView):
-    '''
+    """
     View for log out.
-    '''
+    """
     def get(self, request, *args, **kwargs):
         logout(request)
         return Response({'info': 'logged out'})
 
 class NotesView(viewsets.ModelViewSet):
-    '''
+    """
     View for CRUD on notes.
-    '''
+    """
     serializer_class = NotesSerializer
     permission_classes = (permissions.IsAuthenticated, IsOwner,)
     queryset = Notes.objects.all()
