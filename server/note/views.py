@@ -192,3 +192,4 @@ class NotesView(viewsets.ModelViewSet):
         bookmarkedNotes = Notes.objects.filter(bookmark=True, user=self.request.user)
         serializer = NotesSerializer(bookmarkedNotes, many=True)
         return Response(serializer.data)
+        
