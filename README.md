@@ -1,5 +1,5 @@
 # Notes
-API to manage notes -> https://notes.silive.in/api/
+API to manage notes 
 
 To setup locally, make sure to setup env variables and then install the req.txt.
 
